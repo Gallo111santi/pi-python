@@ -1,0 +1,446 @@
+Crear un bot para WhatsApp implica usar una API y un lenguaje de programación. Aquí te dejo un ejemplo simple usando Python y Flask para manejar el bot. Este código es una estructura básica; necesitarás configurarlo con Twilio o WhatsApp Business API para que funcione.
+
+Código Fuente del Juego
+
+from flask import Flask, request
+import random
+
+app = Flask(__name__)
+
+# Almacenar el estado del juego de cada jugador
+game_state = {}
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    incoming_msg = request.json.get('Body', '').strip().lower()
+    sender = request.json.get('From')
+
+    if sender not in game_state:
+        game_state[sender] = "start"
+
+    response_msg = ""
+
+    if game_state[sender] == "start":
+        response_msg = "¡Bienvenido a la Aventura en Brasil! Estás en la selva amazónica. ¿Quieres (1) explorar más, o (2) construir un refugio?"
+        game_state[sender] = "selva"
+    
+    elif game_state[sender] == "selva":
+        if incoming_msg == "1":
+            response_msg = "Te adentras en la selva y encuentras un río. ¿Quieres (1) nadar, o (2) buscar un camino a seguir?"
+            game_state[sender] = "río"
+        elif incoming_msg == "2":
+            response_msg = "Construyes un refugio. ¿Quieres (1) salir a explorar, o (2) quedarte a descansar?"
+            game_state[sender] = "refugio"
+
+    elif game_state[sender] == "río":
+        if incoming_msg == "1":
+            response_msg = "Nadas y te encuentras con un grupo de delfines. ¿Quieres (1) jugar con ellos, o (2) seguir nadando?"
+            game_state[sender] = "delfines"
+        elif incoming_msg == "2":
+            response_msg = "Encuentras un camino que te lleva a una aldea. ¿Quieres (1) interactuar con los aldeanos, o (2) seguir explorando solo?"
+            game_state[sender] = "aldea"
+
+    elif game_state[sender] == "delfines":
+        if incoming_msg == "1":
+            response_msg = "¡Divertido! Juegas con los delfines y aprendes sobre su hábitat. Fin de la aventura."
+            game_state[sender] = "start"
+        elif incoming_msg == "2":
+            response_msg = "Sigues nadando y llegas a una zona desconocida. Fin de la aventura."
+            game_state[sender] = "start"
+
+    elif game_state[sender] == "aldea":
+        if incoming_msg == "1":
+            response_msg = "Los aldeanos te enseñan sobre su cultura. Fin de la aventura."
+            game_state[sender] = "start"
+        elif incoming_msg == "2":
+            response_msg = "Te pierdes en la selva. Fin de la aventura."
+            game_state[sender] = "start"
+
+    return {'messages': [{'to': sender, 'body': response_msg}]}
+
+if __name__ == '__main__':
+    app.run(port=5000)
+
+Instrucciones para Ejecutar
+
+1. Configuración:
+
+Necesitarás una cuenta de Twilio y configurar un número de WhatsApp.
+
+Instala Flask: pip install Flask.
+
+Asegúrate de tener un entorno donde puedas ejecutar el servidor Flask.
+
+
+
+2. Ejecuta el servidor:
+
+Guarda el código en un archivo llamado app.py.
+
+Ejecuta python app.py en tu terminal.
+
+
+
+3. Webhook de Twilio:
+
+Configura el webhook en tu cuenta de Twilio para que apunte a http://<tu_dominio>:5000/webhook.
+
+
+
+
+Notas
+
+Este es un ejemplo básico y puedes expandirlo añadiendo más decisiones y narrativas.
+
+Asegúrate de manejar excepciones y errores para una mejor experiencia de usuario.
+
+Este código no incluye autenticación, así que ten cuidado con la seguridad si decides implementarlo en un entorno real.Crear un bot para WhatsApp implica usar una API y un lenguaje de programación. Aquí te dejo un ejemplo simple usando Python y Flask para manejar el bot. Este código es una estructura básica; necesitarás configurarlo con Twilio o WhatsApp Business API para que funcione.
+
+Código Fuente del Juego
+
+from flask import Flask, request
+import random
+
+app = Flask(__name__)
+
+# Almacenar el estado del juego de cada jugador
+game_state = {}
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    incoming_msg = request.json.get('Body', '').strip().lower()
+    sender = request.json.get('From')
+
+    if sender not in game_state:
+        game_state[sender] = "start"
+
+    response_msg = ""
+
+    if game_state[sender] == "start":
+        response_msg = "¡Bienvenido a la Aventura en Brasil! Estás en la selva amazónica. ¿Quieres (1) explorar más, o (2) construir un refugio?"
+        game_state[sender] = "selva"
+    
+    elif game_state[sender] == "selva":
+        if incoming_msg == "1":
+            response_msg = "Te adentras en la selva y encuentras un río. ¿Quieres (1) nadar, o (2) buscar un camino a seguir?"
+            game_state[sender] = "río"
+        elif incoming_msg == "2":
+            response_msg = "Construyes un refugio. ¿Quieres (1) salir a explorar, o (2) quedarte a descansar?"
+            game_state[sender] = "refugio"
+
+    elif game_state[sender] == "río":
+        if incoming_msg == "1":
+            response_msg = "Nadas y te encuentras con un grupo de delfines. ¿Quieres (1) jugar con ellos, o (2) seguir nadando?"
+            game_state[sender] = "delfines"
+        elif incoming_msg == "2":
+            response_msg = "Encuentras un camino que te lleva a una aldea. ¿Quieres (1) interactuar con los aldeanos, o (2) seguir explorando solo?"
+            game_state[sender] = "aldea"
+
+    elif game_state[sender] == "delfines":
+        if incoming_msg == "1":
+            response_msg = "¡Divertido! Juegas con los delfines y aprendes sobre su hábitat. Fin de la aventura."
+            game_state[sender] = "start"
+        elif incoming_msg == "2":
+            response_msg = "Sigues nadando y llegas a una zona desconocida. Fin de la aventura."
+            game_state[sender] = "start"
+
+    elif game_state[sender] == "aldea":
+        if incoming_msg == "1":
+            response_msg = "Los aldeanos te enseñan sobre su cultura. Fin de la aventura."
+            game_state[sender] = "start"
+        elif incoming_msg == "2":
+            response_msg = "Te pierdes en la selva. Fin de la aventura."
+            game_state[sender] = "start"
+
+    return {'messages': [{'to': sender, 'body': response_msg}]}
+
+if __name__ == '__main__':
+    app.run(port=5000)
+
+Instrucciones para Ejecutar
+
+1. Configuración:
+
+Necesitarás una cuenta de Twilio y configurar un número de WhatsApp.
+
+Instala Flask: pip install Flask.
+
+Asegúrate de tener un entorno donde puedas ejecutar el servidor Flask.
+
+
+
+2. Ejecuta el servidor:
+
+Guarda el código en un archivo llamado app.py.
+
+Ejecuta python app.py en tu terminal.
+
+
+
+3. Webhook de Twilio:
+
+Configura el webhook en tu cuenta de Twilio para que apunte a http://<tu_dominio>:5000/webhook.
+
+
+
+
+Notas
+
+Este es un ejemplo básico y puedes expandirlo añadiendo más decisiones y narrativas.
+
+Asegúrate de manejar excepciones y errores para una mejor experiencia de usuario.
+
+Este código no incluye autenticación, así que ten cuidado con la seguridad si decides implementarlo en un entorno real.Crear un bot para WhatsApp implica usar una API y un lenguaje de programación. Aquí te dejo un ejemplo simple usando Python y Flask para manejar el bot. Este código es una estructura básica; necesitarás configurarlo con Twilio o WhatsApp Business API para que funcione.
+
+Código Fuente del Juego
+
+from flask import Flask, request
+import random
+
+app = Flask(__name__)
+
+# Almacenar el estado del juego de cada jugador
+game_state = {}
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    incoming_msg = request.json.get('Body', '').strip().lower()
+    sender = request.json.get('From')
+
+    if sender not in game_state:
+        game_state[sender] = "start"
+
+    response_msg = ""
+
+    if game_state[sender] == "start":
+        response_msg = "¡Bienvenido a la Aventura en Brasil! Estás en la selva amazónica. ¿Quieres (1) explorar más, o (2) construir un refugio?"
+        game_state[sender] = "selva"
+    
+    elif game_state[sender] == "selva":
+        if incoming_msg == "1":
+            response_msg = "Te adentras en la selva y encuentras un río. ¿Quieres (1) nadar, o (2) buscar un camino a seguir?"
+            game_state[sender] = "río"
+        elif incoming_msg == "2":
+            response_msg = "Construyes un refugio. ¿Quieres (1) salir a explorar, o (2) quedarte a descansar?"
+            game_state[sender] = "refugio"
+
+    elif game_state[sender] == "río":
+        if incoming_msg == "1":
+            response_msg = "Nadas y te encuentras con un grupo de delfines. ¿Quieres (1) jugar con ellos, o (2) seguir nadando?"
+            game_state[sender] = "delfines"
+        elif incoming_msg == "2":
+            response_msg = "Encuentras un camino que te lleva a una aldea. ¿Quieres (1) interactuar con los aldeanos, o (2) seguir explorando solo?"
+            game_state[sender] = "aldea"
+
+    elif game_state[sender] == "delfines":
+        if incoming_msg == "1":
+            response_msg = "¡Divertido! Juegas con los delfines y aprendes sobre su hábitat. Fin de la aventura."
+            game_state[sender] = "start"
+        elif incoming_msg == "2":
+            response_msg = "Sigues nadando y llegas a una zona desconocida. Fin de la aventura."
+            game_state[sender] = "start"
+
+    elif game_state[sender] == "aldea":
+        if incoming_msg == "1":
+            response_msg = "Los aldeanos te enseñan sobre su cultura. Fin de la aventura."
+            game_state[sender] = "start"
+        elif incoming_msg == "2":
+            response_msg = "Te pierdes en la selva. Fin de la aventura."
+            game_state[sender] = "start"
+
+    return {'messages': [{'to': sender, 'body': response_msg}]}
+
+if __name__ == '__main__':
+    app.run(port=5000)
+
+Instrucciones para Ejecutar
+
+1. Configuración:
+
+Necesitarás una cuenta de Twilio y configurar un número de WhatsApp.
+
+Instala Flask: pip install Flask.
+
+Asegúrate de tener un entorno donde puedas ejecutar el servidor Flask.
+
+
+
+2. Ejecuta el servidor:
+
+Guarda el código en un archivo llamado app.py.
+
+Ejecuta python app.py en tu terminal.
+
+
+
+3. Webhook de Twilio:
+
+Configura el webhook en tu cuenta de Twilio para que apunte a http://<tu_dominio>:5000/webhook.
+
+
+
+
+Notas
+
+Este es un ejemplo básico y puedes expandirlo añadiendo más decisiones y narrativas.
+
+Asegúrate de manejar excepciones y errores para una mejor experiencia de usuario.
+
+Este código no incluye autenticación, así que ten cuidado con la seguridad si decides implementarlo en un entorno real.Crear un bot para WhatsApp implica usar una API y un lenguaje de programación. Aquí te dejo un ejemplo simple usando Python y Flask para manejar el bot. Este código es una estructura básica; necesitarás configurarlo con Twilio o WhatsApp Business API para que funcione.
+
+Código Fuente del Juego
+
+from flask import Flask, request
+import random
+
+app = Flask(__name__)
+
+# Almacenar el estado del juego de cada jugador
+game_state = {}
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    incoming_msg = request.json.get('Body', '').strip().lower()
+    sender = request.json.get('From')
+
+    if sender not in game_state:
+        game_state[sender] = "start"
+
+    response_msg = ""
+
+    if game_state[sender] == "start":
+        response_msg = "¡Bienvenido a la Aventura en Brasil! Estás en la selva amazónica. ¿Quieres (1) explorar más, o (2) construir un refugio?"
+        game_state[sender] = "selva"
+    
+    elif game_state[sender] == "selva":
+        if incoming_msg == "1":
+            response_msg = "Te adentras en la selva y encuentras un río. ¿Quieres (1) nadar, o (2) buscar un camino a seguir?"
+            game_state[sender] = "río"
+        elif incoming_msg == "2":
+            response_msg = "Construyes un refugio. ¿Quieres (1) salir a explorar, o (2) quedarte a descansar?"
+            game_state[sender] = "refugio"
+
+    elif game_state[sender] == "río":
+        if incoming_msg == "1":
+            response_msg = "Nadas y te encuentras con un grupo de delfines. ¿Quieres (1) jugar con ellos, o (2) seguir nadando?"
+            game_state[sender] = "delfines"
+        elif incoming_msg == "2":
+            response_msg = "Encuentras un camino que te lleva a una aldea. ¿Quieres (1) interactuar con los aldeanos, o (2) seguir explorando solo?"
+            game_state[sender] = "aldea"
+
+    elif game_state[sender] == "delfines":
+        if incoming_msg == "1":
+            response_msg = "¡Divertido! Juegas con los delfines y aprendes sobre su hábitat. Fin de la aventura."
+            game_state[sender] = "start"
+        elif incoming_msg == "2":
+            response_msg = "Sigues nadando y llegas a una zona desconocida. Fin de la aventura."
+            game_state[sender] = "start"
+
+    elif game_state[sender] == "aldea":
+        if incoming_msg == "1":
+            response_msg = "Los aldeanos te enseñan sobre su cultura. Fin de la aventura."
+            game_state[sender] = "start"
+        elif incoming_msg == "2":
+            response_msg = "Te pierdes en la selva. Fin de la aventura."
+            game_state[sender] = "start"
+
+    return {'messages': [{'to': sender, 'body': response_msg}]}
+
+if __name__ == '__main__':
+    app.run(port=5000)
+
+Instrucciones para Ejecutar
+
+1. Configuración:
+
+Necesitarás una cuenta de Twilio y configurar un número de WhatsApp.
+
+Instala Flask: pip install Flask.
+
+Asegúrate de tener un entorno donde puedas ejecutar el servidor Flask.
+
+
+
+2. Ejecuta el servidor:
+
+Guarda el código en un archivo llamado app.py.
+
+Ejecuta python app.py en tu terminal.
+
+
+
+3. Webhook de Twilio:
+
+Configura el webhook en tu cuenta de Twilio para que apunte a http://<tu_dominio>:5000/webhook.
+
+
+
+
+Notas
+
+Este es un ejemplo básico y puedes expandirlo añadiendo más decisiones y narrativas.
+
+Asegúrate de manejar excepciones y errores para una mejor experiencia de usuario.
+
+Este código no incluye autenticación, así que ten cuidado con la seguridad si decides implementarlo en un entorno real.Crear un bot para WhatsApp implica usar una API y un lenguaje de programación. Aquí te dejo un ejemplo simple usando Python y Flask para manejar el bot. Este código es una estructura básica; necesitarás configurarlo con Twilio o WhatsApp Business API para que funcione.
+
+Código Fuente del Juego
+
+from flask import Flask, request
+import random
+
+app = Flask(__name__)
+
+# Almacenar el estado del juego de cada jugador
+game_state = {}
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    incoming_msg = request.json.get('Body', '').strip().lower()
+    sender = request.json.get('From')
+
+    if sender not in game_state:
+        game_state[sender] = "start"
+
+    response_msg = ""
+
+    if game_state[sender] == "start":
+        response_msg = "¡Bienvenido a la Aventura en Brasil! Estás en la selva amazónica. ¿Quieres (1) explorar más, o (2) construir un refugio?"
+        game_state[sender] = "selva"
+    
+    elif game_state[sender] == "selva":
+        if incoming_msg == "1":
+            response_msg = "Te adentras en la selva y encuentras un río. ¿Quieres (1) nadar, o (2) buscar un camino a seguir?"
+            game_state[sender] = "río"
+        elif incoming_msg == "2":
+            response_msg = "Construyes un refugio. ¿Quieres (1) salir a explorar, o (2) quedarte a descansar?"
+            game_state[sender] = "refugio"
+
+    elif game_state[sender] == "río":
+        if incoming_msg == "1":
+            response_msg = "Nadas y te encuentras con un grupo de delfines. ¿Quieres (1) jugar con ellos, o (2) seguir nadando?"
+            game_state[sender] = "delfines"
+        elif incoming_msg == "2":
+            response_msg = "Encuentras un camino que te lleva a una aldea. ¿Quieres (1) interactuar con los aldeanos, o (2) seguir explorando solo?"
+            game_state[sender] = "aldea"
+
+    elif game_state[sender] == "delfines":
+        if incoming_msg == "1":
+            response_msg = "¡Divertido! Juegas con los delfines y aprendes sobre su hábitat. Fin de la aventura."
+            game_state[sender] = "start"
+        elif incoming_msg == "2":
+            response_msg = "Sigues nadando y llegas a una zona desconocida. Fin de la aventura."
+            game_state[sender] = "start"
+
+    elif game_state[sender] == "aldea":
+        if incoming_msg == "1":
+            response_msg = "Los aldeanos te enseñan sobre su cultura. Fin de la aventura."
+            game_state[sender] = "start"
+        elif incoming_msg == "2":
+            response_msg = "Te pierdes en la selva. Fin de la aventura."
+            game_state[sender] = "start"
+
+    return {'messages': [{'to': sender, 'body': response_msg}]}
+
+if __name__ == '__main__':
+    app.run(port=5000)
